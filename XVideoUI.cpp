@@ -10,207 +10,227 @@ using namespace std;
 static bool pressSlider = false;
 static bool isExport = false;
 
-XVideoUI::XVideoUI(QWidget *parent)
-    : QWidget(parent)
+XVideoUI::XVideoUI(QWidget* parent)
+	: QWidget(parent)
 {
-    ui.setupUi(this);
-    setWindowFlag(Qt::FramelessWindowHint);
-    qRegisterMetaType<cv::Mat>("cv::Mat");
+	ui.setupUi(this);
+	setWindowFlag(Qt::FramelessWindowHint);
+	qRegisterMetaType<cv::Mat>("cv::Mat");
 
-    //原视频信号
-    QObject::connect(
-        XVideoThread::Get(),
-        SIGNAL(ViewImage1(cv::Mat)),
-        ui.src1,
-        SLOT(SetImage(cv::Mat))
-    );
-    //输出视频信号
-    QObject::connect(
-        XVideoThread::Get(),
-        SIGNAL(ViewDes(cv::Mat)),
-        ui.des,
-        SLOT(SetImage(cv::Mat))
-    );
-    //导出视频结束
-    QObject::connect(
-        XVideoThread::Get(),
-        SIGNAL(SaveEnd()),
-        this,
-        SLOT(ExportEnd())
-    );
-    //打开视频按钮启用
-    QObject::connect(
-        XVideoThread::Get(),
-        SIGNAL(SetEnable()),
-        this,
-        SLOT(ButSetEnable())
-    );
-    Pause();
-    ButSetEnable(false);
-    startTimer(40);
-    
+	//原视频信号
+	QObject::connect(
+		XVideoThread::Get(),
+		SIGNAL(ViewImage1(cv::Mat)),
+		ui.src1,
+		SLOT(SetImage(cv::Mat))
+	);
+	//输出视频信号
+	QObject::connect(
+		XVideoThread::Get(),
+		SIGNAL(ViewDes(cv::Mat)),
+		ui.des,
+		SLOT(SetImage(cv::Mat))
+	);
+	//导出视频结束
+	QObject::connect(
+		XVideoThread::Get(),
+		SIGNAL(SaveEnd()),
+		this,
+		SLOT(ExportEnd())
+	);
+	//打开视频按钮启用
+	QObject::connect(
+		XVideoThread::Get(),
+		SIGNAL(SetEnable()),
+		this,
+		SLOT(ButSetEnable())
+	);
+	Pause();
+	ButSetEnable(false);
+	startTimer(40);
+
 }
 
 void XVideoUI::timerEvent(QTimerEvent* e) {
-    if (pressSlider) return;
-    double pos = XVideoThread::Get()->GetPos();
-    ui.playSlider->setValue(pos * 1000);
+	if (pressSlider) return;
+	double pos = XVideoThread::Get()->GetPos();
+	ui.playSlider->setValue(pos * 1000);
 }
 
 void XVideoUI::Open() {
-    QString name = QFileDialog::getOpenFileName(this, QString::fromLocal8Bit("请选择视频文件"));
-    if (name.isEmpty()) return;
-    string file = name.toLocal8Bit().data();
+	QString name = QFileDialog::getOpenFileName(this, QString::fromLocal8Bit("请选择视频文件"));
+	if (name.isEmpty()) return;
+	string file = name.toLocal8Bit().data();
 
-    if (!XVideoThread::Get()->Open(file)) {
-        QMessageBox::information(this, "error", name+" open failed!");
-        return;
-    }
-    //QMessageBox::information(this, "", name);
-
-    Play();
+	if (!XVideoThread::Get()->Open(file)) {
+		QMessageBox::information(this, "error", name + " open failed!");
+		return;
+	}
+	//QMessageBox::information(this, "", name);
+	ui.width->setValue(XVideoThread::Get()->width);
+	ui.height->setValue(XVideoThread::Get()->height);
+	Play();
 }
 
 void XVideoUI::SliderPress() {
-    pressSlider = true;
+	pressSlider = true;
 }
 void XVideoUI::SliderRelease() {
-    pressSlider = false;
+	pressSlider = false;
 }
 //滑动条拖动
 void XVideoUI::SetPos(int pos) {
-    XVideoThread::Get()->Seek((double)pos / 1000.);
+	XVideoThread::Get()->Seek((double)pos / 1000.);
 }
 
 void XVideoUI::Set() {
-    XFilter::Get()->Clear();
+	XFilter::Get()->Clear();
 
-    //图像金字塔
-    bool ispy = false;
-    double down = ui.pydown->value();
-    double up = ui.pyup->value();
-    if (down > 0) {
-        ispy = true;
-        XFilter::Get()->Add(XTask{ XTASK_PYDOWN,
-            {down}
-            });
-        int w = XVideoThread::Get()->width;
-        int h = XVideoThread::Get()->height;
-        for (int i = 0; i < down; i++)
-        {
-            w /= 2;
-            h /= 2;
-        }
-        ui.width->setValue(w);
-        ui.height->setValue(h);
-    }
-    if (up > 0) {
-        ispy = true;
-        XFilter::Get()->Add(XTask{ XTASK_PYUP,
-            {up}
-            });
-        int w = XVideoThread::Get()->width;
-        int h = XVideoThread::Get()->height;
-        for (int i = 0; i < up; i++)
-        {
-            w *= 2;
-            h *= 2;
-        }
-        ui.width->setValue(w);
-        ui.height->setValue(h);
-    }
-    //调整视频尺寸
-    double w = ui.width->value();
-    double h = ui.height->value();
-    if (!ispy && w > 0 && h > 0) {
-        XFilter::Get()->Add(XTask{ XTASK_RESIZE,
-            {w, h}
-            });
-    }
+	//视频图像裁剪
+	bool isClip = false;
+	double cx = ui.cx->value();
+	double cy = ui.cy->value();
+	double cw = ui.cw->value();
+	double ch = ui.ch->value();
 
-    //对比度亮度
-    if (ui.bright->value() > 0 || ui.contrast->value() > 1) {
-        XFilter::Get()->Add(XTask{ XTASK_GAIN,
-            {(double)ui.bright->value(), ui.contrast->value()}
-            });
-    }
+	if (cx + cy + cy + ch > 0.0001) {
+		isClip = true;
+		XFilter::Get()->Add(XTask{ XTASK_CLIP,
+			{cx, cy, cw, ch}
+			});
+		double w = XVideoThread::Get()->width;
+		double h = XVideoThread::Get()->height;
+		XFilter::Get()->Add(XTask{ XTASK_RESIZE,
+			{w, h}
+			});
+	}
 
-    //图像旋转
-    switch (ui.rotate->currentIndex())
-    {
-    case 1:
-        XFilter::Get()->Add(XTask{ XTASK_RORATE90 });
-        break;
-    case 2:
-        XFilter::Get()->Add(XTask{ XTASK_RORATE180 });
-        break;
-    case 3:
-        XFilter::Get()->Add(XTask{ XTASK_RORATE270 });
-        break;
-    default:
-        break;
-    }
+	//图像金字塔
+	bool ispy = false;
+	double down = ui.pydown->value();
+	double up = ui.pyup->value();
+	if (!isClip && down > 0.0001) {
+		ispy = true;
+		XFilter::Get()->Add(XTask{ XTASK_PYDOWN,
+			{down}
+			});
+		int w = XVideoThread::Get()->width;
+		int h = XVideoThread::Get()->height;
+		for (int i = 0; i < down; i++)
+		{
+			w /= 2;
+			h /= 2;
+		}
+		ui.width->setValue(w);
+		ui.height->setValue(h);
+	}
+	if (!isClip && up > 0.0001) {
+		ispy = true;
+		XFilter::Get()->Add(XTask{ XTASK_PYUP,
+			{up}
+			});
+		int w = XVideoThread::Get()->width;
+		int h = XVideoThread::Get()->height;
+		for (int i = 0; i < up; i++)
+		{
+			w *= 2;
+			h *= 2;
+		}
+		ui.width->setValue(w);
+		ui.height->setValue(h);
+	}
+	//调整视频尺寸
+	double w = ui.width->value();
+	double h = ui.height->value();
+	if (!isClip && !ispy && w > 0 && h > 0) {
+		XFilter::Get()->Add(XTask{ XTASK_RESIZE,
+			{w, h}
+			});
+	}
 
-    //图像镜像
-    switch (ui.flip->currentIndex())
-    {
-    case 1:
-        XFilter::Get()->Add(XTask{ XTASK_FLIPX });
-        break;
-    case 2:
-        XFilter::Get()->Add(XTask{ XTASK_FLIPY });
-        break;
-    case 3:
-        XFilter::Get()->Add(XTask{ XTASK_FLIPXY });
-        break;
-    default:
-        break;
-    }
+	//对比度亮度
+	if (ui.bright->value() > 0 || ui.contrast->value() > 1) {
+		XFilter::Get()->Add(XTask{ XTASK_GAIN,
+			{(double)ui.bright->value(), ui.contrast->value()}
+			});
+	}
+
+	//图像旋转
+	switch (ui.rotate->currentIndex())
+	{
+	case 1:
+		XFilter::Get()->Add(XTask{ XTASK_RORATE90 });
+		break;
+	case 2:
+		XFilter::Get()->Add(XTask{ XTASK_RORATE180 });
+		break;
+	case 3:
+		XFilter::Get()->Add(XTask{ XTASK_RORATE270 });
+		break;
+	default:
+		break;
+	}
+
+	//图像镜像
+	switch (ui.flip->currentIndex())
+	{
+	case 1:
+		XFilter::Get()->Add(XTask{ XTASK_FLIPX });
+		break;
+	case 2:
+		XFilter::Get()->Add(XTask{ XTASK_FLIPY });
+		break;
+	case 3:
+		XFilter::Get()->Add(XTask{ XTASK_FLIPXY });
+		break;
+	default:
+		break;
+	}
 
 }
 
 //导出视频
 void XVideoUI::Export() {
-    if (isExport) {
-        XVideoThread::Get()->StopSave();
-        isExport = false;
-        ui.exportButton->setText("Start Export");
-        return;
-    }
-    QString name = QFileDialog::getSaveFileName(this, "save", "out1.avi");
-    if (name.isEmpty()) return;
-    std::string file = name.toLocal8Bit().data();
-    int w = ui.width->value();
-    int h = ui.height->value();
-    if (XVideoThread::Get()->StartSave(file, w, h)) {
-        isExport = true;
-        ui.exportButton->setText("Stop Export");
-    }
+	if (isExport) {
+		XVideoThread::Get()->StopSave();
+		isExport = false;
+		ui.exportButton->setText("Start Export");
+		return;
+	}
+	QString name = QFileDialog::getSaveFileName(this, "save", "out1.avi");
+	if (name.isEmpty()) return;
+	std::string file = name.toLocal8Bit().data();
+	int w = ui.width->value();
+	int h = ui.height->value();
+	if (XVideoThread::Get()->StartSave(file, w, h)) {
+		isExport = true;
+		ui.exportButton->setText("Stop Export");
+	}
 }
 
 //导出结束
 void XVideoUI::ExportEnd() {
-    isExport = false;
-    ui.exportButton->setText("Start Export");
+	isExport = false;
+	ui.exportButton->setText("Start Export");
 }
 
 //播放
 void XVideoUI::Play() {
-    ui.pauseButton->show();
-    ui.pauseButton->setGeometry(ui.playButton->geometry());
-    ui.playButton->hide();
-    XVideoThread::Get()->Play();
+	ui.pauseButton->show();
+	ui.pauseButton->setGeometry(ui.playButton->geometry());
+	ui.playButton->hide();
+	XVideoThread::Get()->Play();
 }
 //暂停
 void XVideoUI::Pause() {
-    ui.playButton->show();
-    //ui.pauseButton->setGeometry(ui.playButton->geometry());
-    ui.pauseButton->hide();
-    XVideoThread::Get()->Pause();
+	ui.playButton->show();
+	//ui.pauseButton->setGeometry(ui.playButton->geometry());
+	ui.pauseButton->hide();
+	XVideoThread::Get()->Pause();
 }
 
 void XVideoUI::ButSetEnable(bool flag) {
-    ui.playButton->setEnabled(flag);
-    ui.exportButton->setEnabled(flag);
-    ui.setButton->setEnabled(flag);
+	ui.playButton->setEnabled(flag);
+	ui.exportButton->setEnabled(flag);
+	ui.setButton->setEnabled(flag);
 }
