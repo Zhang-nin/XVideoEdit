@@ -118,7 +118,7 @@ double XVideoThread::GetPos() {
 	return pos;
 }
 
-bool XVideoThread::StartSave(const std::string filename, int width, int height) {
+bool XVideoThread::StartSave(const std::string filename, int width, int height, bool isColor) {
 	Seek(0);
 	cout << "开始导出" << endl;
 	mutex.lock();
@@ -132,7 +132,7 @@ bool XVideoThread::StartSave(const std::string filename, int width, int height) 
 		VideoWriter::fourcc('X', '2', '6', '4'),
 		this->fps,
 		Size(width, height),
-		true
+		isColor
 	);
 	if (!vw.isOpened()) {
 		mutex.unlock();

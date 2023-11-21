@@ -9,7 +9,7 @@ using namespace std;
 
 static bool pressSlider = false;
 static bool isExport = false;
-
+static bool isColor = true;
 XVideoUI::XVideoUI(QWidget* parent)
 	: QWidget(parent)
 {
@@ -85,7 +85,6 @@ void XVideoUI::SetPos(int pos) {
 
 void XVideoUI::Set() {
 	XFilter::Get()->Clear();
-
 	//ÊÓÆµÍ¼Ïñ²Ã¼ô
 	bool isClip = false;
 	double cx = ui.cx->value();
@@ -155,6 +154,20 @@ void XVideoUI::Set() {
 			});
 	}
 
+	//»Ò¶ÈÍ¼
+	switch (ui.color->currentIndex())
+	{
+	case 0:
+		isColor = true;
+		break;
+	case 1:
+		XFilter::Get()->Add(XTask{ XTASK_GRAY });
+		isColor = false;
+		break;
+	default:
+		break;
+	}
+
 	//Í¼ÏñÐý×ª
 	switch (ui.rotate->currentIndex())
 	{
@@ -202,7 +215,7 @@ void XVideoUI::Export() {
 	std::string file = name.toLocal8Bit().data();
 	int w = ui.width->value();
 	int h = ui.height->value();
-	if (XVideoThread::Get()->StartSave(file, w, h)) {
+	if (XVideoThread::Get()->StartSave(file, w, h, isColor)) {
 		isExport = true;
 		ui.exportButton->setText("Stop Export");
 	}

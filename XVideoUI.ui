@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>808</width>
-    <height>617</height>
+    <width>1110</width>
+    <height>813</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -58,7 +58,7 @@ color:rgb(255, 255, 255);
   <widget class="QPushButton" name="closeButton">
    <property name="geometry">
     <rect>
-     <x>770</x>
+     <x>1080</x>
      <y>0</y>
      <width>31</width>
      <height>28</height>
@@ -77,18 +77,18 @@ color:rgb(255, 255, 255);
   <widget class="XVideoWidget" name="src1">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>30</y>
-     <width>380</width>
-     <height>280</height>
+     <x>20</x>
+     <y>20</y>
+     <width>520</width>
+     <height>360</height>
     </rect>
    </property>
   </widget>
   <widget class="QPushButton" name="openButton">
    <property name="geometry">
     <rect>
-     <x>410</x>
-     <y>330</y>
+     <x>720</x>
+     <y>430</y>
      <width>61</width>
      <height>28</height>
     </rect>
@@ -100,9 +100,9 @@ color:rgb(255, 255, 255);
   <widget class="QSlider" name="playSlider">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>320</y>
-     <width>381</width>
+     <x>20</x>
+     <y>400</y>
+     <width>520</width>
      <height>16</height>
     </rect>
    </property>
@@ -116,8 +116,8 @@ color:rgb(255, 255, 255);
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>380</x>
-     <y>380</y>
+     <x>630</x>
+     <y>500</y>
      <width>111</width>
      <height>18</height>
     </rect>
@@ -129,8 +129,8 @@ color:rgb(255, 255, 255);
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>350</x>
-     <y>410</y>
+     <x>600</x>
+     <y>530</y>
      <width>151</width>
      <height>18</height>
     </rect>
@@ -142,8 +142,8 @@ color:rgb(255, 255, 255);
   <widget class="QSpinBox" name="bright">
    <property name="geometry">
     <rect>
-     <x>520</x>
-     <y>380</y>
+     <x>780</x>
+     <y>500</y>
      <width>171</width>
      <height>24</height>
     </rect>
@@ -152,8 +152,8 @@ color:rgb(255, 255, 255);
   <widget class="QDoubleSpinBox" name="contrast">
    <property name="geometry">
     <rect>
-     <x>520</x>
-     <y>410</y>
+     <x>780</x>
+     <y>530</y>
      <width>171</width>
      <height>24</height>
     </rect>
@@ -168,18 +168,18 @@ color:rgb(255, 255, 255);
   <widget class="XVideoWidget" name="des">
    <property name="geometry">
     <rect>
-     <x>400</x>
-     <y>30</y>
-     <width>380</width>
-     <height>280</height>
+     <x>560</x>
+     <y>20</y>
+     <width>520</width>
+     <height>360</height>
     </rect>
    </property>
   </widget>
   <widget class="QPushButton" name="setButton">
    <property name="geometry">
     <rect>
-     <x>720</x>
-     <y>400</y>
+     <x>980</x>
+     <y>430</y>
      <width>71</width>
      <height>28</height>
     </rect>
@@ -191,8 +191,8 @@ color:rgb(255, 255, 255);
   <widget class="QPushButton" name="exportButton">
    <property name="geometry">
     <rect>
-     <x>490</x>
-     <y>330</y>
+     <x>800</x>
+     <y>430</y>
      <width>141</width>
      <height>31</height>
     </rect>
@@ -204,8 +204,8 @@ color:rgb(255, 255, 255);
   <widget class="QPushButton" name="playButton">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>350</y>
+     <x>220</x>
+     <y>430</y>
      <width>41</width>
      <height>28</height>
     </rect>
@@ -217,8 +217,8 @@ color:rgb(255, 255, 255);
   <widget class="QPushButton" name="pauseButton">
    <property name="geometry">
     <rect>
-     <x>180</x>
-     <y>350</y>
+     <x>260</x>
+     <y>430</y>
      <width>41</width>
      <height>28</height>
     </rect>
@@ -230,9 +230,9 @@ color:rgb(255, 255, 255);
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
-     <x>400</x>
-     <y>440</y>
-     <width>71</width>
+     <x>650</x>
+     <y>560</y>
+     <width>81</width>
      <height>18</height>
     </rect>
    </property>
@@ -243,8 +243,8 @@ color:rgb(255, 255, 255);
   <widget class="QComboBox" name="rotate">
    <property name="geometry">
     <rect>
-     <x>520</x>
-     <y>440</y>
+     <x>780</x>
+     <y>560</y>
      <width>171</width>
      <height>23</height>
     </rect>
@@ -273,9 +273,9 @@ color:rgb(255, 255, 255);
   <widget class="QLabel" name="label_4">
    <property name="geometry">
     <rect>
-     <x>400</x>
-     <y>470</y>
-     <width>71</width>
+     <x>650</x>
+     <y>590</y>
+     <width>81</width>
      <height>18</height>
     </rect>
    </property>
@@ -286,8 +286,8 @@ color:rgb(255, 255, 255);
   <widget class="QComboBox" name="flip">
    <property name="geometry">
     <rect>
-     <x>520</x>
-     <y>470</y>
+     <x>780</x>
+     <y>590</y>
      <width>171</width>
      <height>23</height>
     </rect>
@@ -316,9 +316,9 @@ color:rgb(255, 255, 255);
   <widget class="QLabel" name="label_5">
    <property name="geometry">
     <rect>
-     <x>370</x>
-     <y>500</y>
-     <width>111</width>
+     <x>620</x>
+     <y>620</y>
+     <width>121</width>
      <height>20</height>
     </rect>
    </property>
@@ -329,8 +329,8 @@ color:rgb(255, 255, 255);
   <widget class="QSpinBox" name="width">
    <property name="geometry">
     <rect>
-     <x>520</x>
-     <y>500</y>
+     <x>780</x>
+     <y>620</y>
      <width>81</width>
      <height>24</height>
     </rect>
@@ -342,8 +342,8 @@ color:rgb(255, 255, 255);
   <widget class="QSpinBox" name="height">
    <property name="geometry">
     <rect>
-     <x>610</x>
-     <y>500</y>
+     <x>870</x>
+     <y>620</y>
      <width>81</width>
      <height>24</height>
     </rect>
@@ -355,9 +355,9 @@ color:rgb(255, 255, 255);
   <widget class="QLabel" name="label_6">
    <property name="geometry">
     <rect>
-     <x>240</x>
-     <y>530</y>
-     <width>251</width>
+     <x>490</x>
+     <y>650</y>
+     <width>261</width>
      <height>20</height>
     </rect>
    </property>
@@ -368,8 +368,8 @@ color:rgb(255, 255, 255);
   <widget class="QSpinBox" name="pydown">
    <property name="geometry">
     <rect>
-     <x>520</x>
-     <y>530</y>
+     <x>780</x>
+     <y>650</y>
      <width>81</width>
      <height>24</height>
     </rect>
@@ -381,8 +381,8 @@ color:rgb(255, 255, 255);
   <widget class="QSpinBox" name="pyup">
    <property name="geometry">
     <rect>
-     <x>610</x>
-     <y>530</y>
+     <x>870</x>
+     <y>650</y>
      <width>81</width>
      <height>24</height>
     </rect>
@@ -394,9 +394,9 @@ color:rgb(255, 255, 255);
   <widget class="QLabel" name="label_7">
    <property name="geometry">
     <rect>
-     <x>310</x>
-     <y>560</y>
-     <width>161</width>
+     <x>560</x>
+     <y>680</y>
+     <width>181</width>
      <height>20</height>
     </rect>
    </property>
@@ -407,8 +407,8 @@ color:rgb(255, 255, 255);
   <widget class="QSpinBox" name="cx">
    <property name="geometry">
     <rect>
-     <x>470</x>
-     <y>560</y>
+     <x>780</x>
+     <y>680</y>
      <width>81</width>
      <height>24</height>
     </rect>
@@ -420,8 +420,8 @@ color:rgb(255, 255, 255);
   <widget class="QSpinBox" name="cy">
    <property name="geometry">
     <rect>
-     <x>550</x>
-     <y>560</y>
+     <x>860</x>
+     <y>680</y>
      <width>81</width>
      <height>24</height>
     </rect>
@@ -433,8 +433,8 @@ color:rgb(255, 255, 255);
   <widget class="QSpinBox" name="cw">
    <property name="geometry">
     <rect>
-     <x>630</x>
-     <y>560</y>
+     <x>940</x>
+     <y>680</y>
      <width>81</width>
      <height>24</height>
     </rect>
@@ -446,14 +446,47 @@ color:rgb(255, 255, 255);
   <widget class="QSpinBox" name="ch">
    <property name="geometry">
     <rect>
-     <x>710</x>
-     <y>560</y>
+     <x>1020</x>
+     <y>680</y>
      <width>81</width>
      <height>24</height>
     </rect>
    </property>
    <property name="maximum">
     <number>9999</number>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="color">
+   <property name="geometry">
+    <rect>
+     <x>780</x>
+     <y>710</y>
+     <width>171</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>RGB图像</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>灰度图</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QLabel" name="label_8">
+   <property name="geometry">
+    <rect>
+     <x>640</x>
+     <y>710</y>
+     <width>81</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>图像格式</string>
    </property>
   </widget>
  </widget>
