@@ -11,6 +11,17 @@ public:
 	int height = 0;
 	int width2 = 0;
 	int height2 = 0;
+	int totalMs = 0;
+	std::string srcFile;
+	std::string desFile;
+
+	int begin = 0;
+	int end = 0;
+
+	void SetBegin(double p);
+	void SetEnd(double p);
+	
+
 	//单件模式 获取对象
 	static XVideoThread* Get() {
 		static XVideoThread vt;

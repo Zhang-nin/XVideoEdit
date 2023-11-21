@@ -8,6 +8,8 @@
 #include<opencv2/imgproc.hpp>
 #include<opencv2/highgui.hpp>
 #include<opencv2/imgcodecs.hpp>
+#include<qfile.h>
+#include"XAudio.h"
 using namespace std;
 
 static bool pressSlider = false;
@@ -248,8 +250,7 @@ void XVideoUI::Set() {
 void XVideoUI::Export() {
 	if (isExport) {
 		XVideoThread::Get()->StopSave();
-		isExport = false;
-		ui.exportButton->setText("Start Export");
+		ExportEnd();
 		return;
 	}
 	QString name = QFileDialog::getSaveFileName(this, "save", "out1.avi");
@@ -267,6 +268,23 @@ void XVideoUI::Export() {
 void XVideoUI::ExportEnd() {
 	isExport = false;
 	ui.exportButton->setText("Start Export");
+	string src = XVideoThread::Get()->srcFile;
+	string des = XVideoThread::Get()->desFile;
+
+	int ss = 0;
+	int t = 0;
+	ss = XVideoThread::Get()->totalMs * ((double)ui.left->value() / 1000.);
+	t = XVideoThread::Get()->totalMs * ((double)ui.right->value() / 1000.);
+	t -= ss;
+	//´¦ÀíÒôÆµ
+	QFile::remove((src + ".mp3").c_str());
+	XAudio::Get()->ExportA(src, src + ".mp3", ss, t);
+	string tmp = des + ".avi";
+	QFile::remove(tmp.c_str());
+	QFile::rename(des.c_str(), tmp.c_str());
+	XAudio::Get()->Merge(tmp, src + ".mp3", des);
+	QFile::remove(tmp.c_str());
+	QFile::remove((src + ".mp3").c_str());
 }
 
 //²¥·Å
@@ -324,6 +342,14 @@ void XVideoUI::Merge() {
 	}
 	std::string file = name.toLocal8Bit().data();
 	isMerge = XVideoThread::Get()->Open2(file);
+}
+
+void XVideoUI::Left(int pos) {
+	XVideoThread::Get()->SetBegin((double)pos / 1000.0);
+	SetPos(pos);
+}
+void XVideoUI::Right(int pos) {
+	XVideoThread::Get()->SetEnd((double)pos / 1000.0);
 }
 
 void XVideoUI::ButSetEnable(bool flag) {

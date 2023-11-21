@@ -21,14 +21,16 @@ bool XVideoThread::Open(const std::string file) {
 	mutex.lock();
 	bool re = cap1.open(file);
 	mutex.unlock();
-	
 	cout << re << endl;
 	if(!re)
 		return re;
 	fps = cap1.get(CAP_PROP_FPS);
 	width = cap1.get(CAP_PROP_FRAME_WIDTH);
 	height = cap1.get(CAP_PROP_FRAME_HEIGHT);
+	srcFile = file;
 	if (fps <= 0) fps = 25;
+	double count = cap1.get(CAP_PROP_FRAME_COUNT);
+	totalMs = (count / (double)fps) * 1000;
 	return true;
 }
 
@@ -91,8 +93,9 @@ void XVideoThread::run() {
 			msleep(5);
 			continue;
 		}
+		int cur = cap1.get(CAP_PROP_POS_FRAMES);
 		//读取一帧视频，解码并做颜色转换
-		if (!cap1.read(mat1) || mat1.empty()) {
+		if ((end>0 && cur >= end) || !cap1.read(mat1) || mat1.empty()) {
 			mutex.unlock();
 			//导出到结尾位置停止导出
 			if (isWrite) {
@@ -153,7 +156,7 @@ double XVideoThread::GetPos() {
 }
 
 bool XVideoThread::StartSave(const std::string filename, int width, int height, bool isColor) {
-	Seek(0);
+	Seek(begin);
 	cout << "开始导出" << endl;
 	mutex.lock();
 	if (!cap1.isOpened()) {
@@ -174,6 +177,7 @@ bool XVideoThread::StartSave(const std::string filename, int width, int height, 
 		return false;
 	}
 	this->isWrite = true;
+	desFile = filename;
 	mutex.unlock();
 	return true;
 }
@@ -183,6 +187,19 @@ void XVideoThread::StopSave() {
 	mutex.lock();
 	vw.release();
 	isWrite = false;
+	mutex.unlock();
+}
+
+void XVideoThread::SetBegin(double p) { 
+	mutex.lock(); 
+	double count = cap1.get(CAP_PROP_FRAME_COUNT);
+	begin = p * count;
+	mutex.unlock(); 
+}
+void XVideoThread::SetEnd(double p) {
+	mutex.lock(); 
+	double count = cap1.get(CAP_PROP_FRAME_COUNT);
+	end = p * count;
 	mutex.unlock();
 }
 

@@ -34,6 +34,9 @@ public slots:
     void Blend();
     //ºÏ²¢
     void Merge();
+
+    void Left(int pos);
+    void Right(int pos);
 private:
     Ui::XVideoUIClass ui;
 };
