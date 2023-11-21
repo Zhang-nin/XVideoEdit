@@ -145,7 +145,7 @@ bool XVideoThread::StartSave(const std::string filename, int width, int height) 
 }
 
 void XVideoThread::StopSave() {
-	cout << "停止导出" << endl;
+	cout << "停止导出11" << endl;
 	mutex.lock();
 	vw.release();
 	isWrite = false;
