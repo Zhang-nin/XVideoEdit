@@ -15,6 +15,7 @@ static bool isExport = false;
 static bool isColor = true;
 static bool isMark = false;
 static bool isBlend = false;
+static bool isMerge = false;
 XVideoUI::XVideoUI(QWidget* parent)
 	: QWidget(parent)
 {
@@ -155,10 +156,11 @@ void XVideoUI::Set() {
 	//调整视频尺寸
 	double w = ui.width->value();
 	double h = ui.height->value();
-	if (!isClip && !ispy && w > 0 && h > 0) {
-		XFilter::Get()->Add(XTask{ XTASK_RESIZE,
-			{w, h}
-			});
+	if (!isMerge && !isClip && !ispy && w > 0 && h > 0) {
+		if (w != XVideoThread::Get()->width || h != XVideoThread::Get()->height) 
+			XFilter::Get()->Add(XTask{ XTASK_RESIZE,
+				{w, h}
+				});
 	}
 
 	//对比度亮度
@@ -223,9 +225,22 @@ void XVideoUI::Set() {
 			{x, y, a}
 			});
 	}
+	//融合
 	if (isBlend) {
 		double a = ui.ba->value();
 		XFilter::Get()->Add(XTask{XTASK_BLEND,{a}});
+	}
+	//合并
+	if (isMerge) {
+		XFilter::Get()->Add(XTask{ XTASK_MERGE});
+		int w1 = XVideoThread::Get()->width;
+		int w2 = XVideoThread::Get()->width2;
+		int h1 = XVideoThread::Get()->height;
+		int h2 = XVideoThread::Get()->height2;
+		if (h1 != h2)
+			w2 *= (double)h2 / (double)h1;
+		ui.width->setValue(w1+(int)w2);
+		ui.height->setValue(h1);
 	}
 }
 
@@ -273,6 +288,7 @@ void XVideoUI::Pause() {
 void XVideoUI::Mark() {
 	isMark = false;
 	isBlend = false;
+	isMerge = false;
 	QString name = QFileDialog::getOpenFileName(this, "select image:");
 	if (name.isEmpty()) {
 		return;
@@ -284,15 +300,30 @@ void XVideoUI::Mark() {
 	isMark = true;
 }
 
+//融合
 void XVideoUI::Blend() {
 	isMark = false;
 	isBlend = false;
-	QString name = QFileDialog::getOpenFileName(this, "select image:");
+	isMerge = false;
+	QString name = QFileDialog::getOpenFileName(this, "select video:");
 	if (name.isEmpty()) {
 		return;
 	}
 	std::string file = name.toLocal8Bit().data();
 	isBlend = XVideoThread::Get()->Open2(file);
+}
+
+//合并
+void XVideoUI::Merge() {
+	isMark = false;
+	isBlend = false;
+	isMerge = false;
+	QString name = QFileDialog::getOpenFileName(this, "select video:");
+	if (name.isEmpty()) {
+		return;
+	}
+	std::string file = name.toLocal8Bit().data();
+	isMerge = XVideoThread::Get()->Open2(file);
 }
 
 void XVideoUI::ButSetEnable(bool flag) {

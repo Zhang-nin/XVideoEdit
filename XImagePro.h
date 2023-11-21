@@ -40,6 +40,9 @@ public:
 	//ÈÚºÏ
 	void Blend(double a);
 
+	//ºÏ²¢
+	void Merge();
+
 	XImagePro();
 	~XImagePro();
 private:

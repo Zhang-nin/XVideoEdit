@@ -93,6 +93,21 @@ void XImagePro::Blend(double a) {
 	addWeighted(src2, a, des, 1 - a, 0, des);
 }
 
+void XImagePro::Merge() {
+	if (des.empty()) return;
+	if (src2.empty()) return;
+	if (src2.rows != des.rows) {
+		int w = src2.cols * ((double)src2.rows / (double)des.rows);
+		resize(src2, src2, Size(w,des.rows));
+	}
+	int dw = src1.cols + src2.cols;
+	int dh = src1.rows;
+	des = Mat(Size(dw, dh), src1.type());
+	Mat r1 = des(Rect(0, 0, src1.cols, dh));
+	Mat r2 = des(Rect(src1.cols, 0, src2.cols, dh));
+	src1.copyTo(r1);
+	src2.copyTo(r2);
+}
 
 XImagePro::XImagePro(){
 

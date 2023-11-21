@@ -42,10 +42,10 @@ bool XVideoThread::Open2(const std::string file) {
 	cout << re << endl;
 	if (!re)
 		return re;
-	/*fps = cap2.get(CAP_PROP_FPS);
-	width = cap2.get(CAP_PROP_FRAME_WIDTH);
-	height = cap2.get(CAP_PROP_FRAME_HEIGHT);
-	if (fps <= 0) fps = 25;*/
+	//fps = cap2.get(CAP_PROP_FPS);
+	width2 = cap2.get(CAP_PROP_FRAME_WIDTH);
+	height2 = cap2.get(CAP_PROP_FRAME_HEIGHT);
+	//if (fps <= 0) fps = 25;
 	return true;
 }
 

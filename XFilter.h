@@ -16,7 +16,8 @@ enum XTaskType {
 	XTASK_CLIP,
 	XTASK_GRAY,
 	XTASK_MASK,
-	XTASK_BLEND
+	XTASK_BLEND,
+	XTASK_MERGE
 };
 struct XTask
 {

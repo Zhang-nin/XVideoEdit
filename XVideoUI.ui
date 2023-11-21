@@ -589,6 +589,19 @@ color:rgb(255, 255, 255);
     <double>0.500000000000000</double>
    </property>
   </widget>
+  <widget class="QPushButton" name="mergeButton">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>610</y>
+     <width>51</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>合并</string>
+   </property>
+  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -778,6 +791,22 @@ color:rgb(255, 255, 255);
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>mergeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>XVideoUIClass</receiver>
+   <slot>Merge()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>459</x>
+     <y>622</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>455</x>
+     <y>-10</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>Open()</slot>
@@ -790,5 +819,6 @@ color:rgb(255, 255, 255);
   <slot>Pause()</slot>
   <slot>Mark()</slot>
   <slot>Blend()</slot>
+  <slot>Merge()</slot>
  </slots>
 </ui>
