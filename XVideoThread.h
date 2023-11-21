@@ -14,7 +14,10 @@ public:
 		static XVideoThread vt;
 		return &vt;
 	}
+
 	bool Open(const std::string file);
+	bool Open2(const std::string file);
+
 	void Play() { mutex.lock(); isPlay = true; mutex.unlock(); };
 	void Pause() { mutex.lock(); isPlay = false; mutex.unlock(); };
 	//返回当前播放位置
@@ -40,6 +43,9 @@ public:
 signals:
 	//显示原视频图像
 	void ViewImage1(cv::Mat mat);
+
+	void ViewImage2(cv::Mat mat);
+
 	//显示生成后图像
 	void ViewDes(cv::Mat mat);
 	void SaveEnd();

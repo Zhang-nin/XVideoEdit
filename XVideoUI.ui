@@ -489,7 +489,7 @@ color:rgb(255, 255, 255);
     <string>图像格式</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="setButton_2">
+  <widget class="QPushButton" name="markButton">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -544,7 +544,49 @@ color:rgb(255, 255, 255);
     <double>1.000000000000000</double>
    </property>
    <property name="value">
+    <double>0.500000000000000</double>
+   </property>
+  </widget>
+  <widget class="XVideoWidget" name="src2">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>530</y>
+     <width>380</width>
+     <height>260</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="blendButton">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>560</y>
+     <width>51</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>融合</string>
+   </property>
+  </widget>
+  <widget class="QDoubleSpinBox" name="ba">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>560</y>
+     <width>81</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="minimum">
     <double>0.000000000000000</double>
+   </property>
+   <property name="maximum">
+    <double>1.000000000000000</double>
+   </property>
+   <property name="value">
+    <double>0.500000000000000</double>
    </property>
   </widget>
  </widget>
@@ -705,7 +747,7 @@ color:rgb(255, 255, 255);
    </hints>
   </connection>
   <connection>
-   <sender>setButton_2</sender>
+   <sender>markButton</sender>
    <signal>clicked()</signal>
    <receiver>XVideoUIClass</receiver>
    <slot>Mark()</slot>
@@ -720,6 +762,22 @@ color:rgb(255, 255, 255);
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>blendButton</sender>
+   <signal>clicked()</signal>
+   <receiver>XVideoUIClass</receiver>
+   <slot>Blend()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>444</x>
+     <y>572</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>475</x>
+     <y>-10</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>Open()</slot>
@@ -731,5 +789,6 @@ color:rgb(255, 255, 255);
   <slot>Play()</slot>
   <slot>Pause()</slot>
   <slot>Mark()</slot>
+  <slot>Blend()</slot>
  </slots>
 </ui>

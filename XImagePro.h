@@ -37,6 +37,9 @@ public:
 	//Ë®Ó¡
 	void Mark(int x, int y, double a);
 
+	//ÈÚºÏ
+	void Blend(double a);
+
 	XImagePro();
 	~XImagePro();
 private:

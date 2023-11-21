@@ -14,6 +14,7 @@ static bool pressSlider = false;
 static bool isExport = false;
 static bool isColor = true;
 static bool isMark = false;
+static bool isBlend = false;
 XVideoUI::XVideoUI(QWidget* parent)
 	: QWidget(parent)
 {
@@ -49,6 +50,15 @@ XVideoUI::XVideoUI(QWidget* parent)
 		this,
 		SLOT(ButSetEnable())
 	);
+
+	//输出融合视频
+	QObject::connect(
+		XVideoThread::Get(),
+		SIGNAL(ViewImage2(cv::Mat)),
+		ui.src2,
+		SLOT(SetImage(cv::Mat))
+	);
+
 	Pause();
 	ButSetEnable(false);
 	startTimer(40);
@@ -213,7 +223,10 @@ void XVideoUI::Set() {
 			{x, y, a}
 			});
 	}
-
+	if (isBlend) {
+		double a = ui.ba->value();
+		XFilter::Get()->Add(XTask{XTASK_BLEND,{a}});
+	}
 }
 
 //导出视频
@@ -259,6 +272,7 @@ void XVideoUI::Pause() {
 //水印
 void XVideoUI::Mark() {
 	isMark = false;
+	isBlend = false;
 	QString name = QFileDialog::getOpenFileName(this, "select image:");
 	if (name.isEmpty()) {
 		return;
@@ -268,6 +282,17 @@ void XVideoUI::Mark() {
 	if (mark.empty())return;
 	XVideoThread::Get()->SetMark(mark);
 	isMark = true;
+}
+
+void XVideoUI::Blend() {
+	isMark = false;
+	isBlend = false;
+	QString name = QFileDialog::getOpenFileName(this, "select image:");
+	if (name.isEmpty()) {
+		return;
+	}
+	std::string file = name.toLocal8Bit().data();
+	isBlend = XVideoThread::Get()->Open2(file);
 }
 
 void XVideoUI::ButSetEnable(bool flag) {

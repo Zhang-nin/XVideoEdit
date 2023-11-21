@@ -30,6 +30,8 @@ public slots:
     void ButSetEnable(bool flag=true);
     //Ë®Ó¡
     void Mark();
+    //ÈÚºÏ
+    void Blend();
 private:
     Ui::XVideoUIClass ui;
 };

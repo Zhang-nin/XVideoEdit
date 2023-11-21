@@ -85,6 +85,15 @@ void XImagePro::Mark(int x, int y, double a) {
 	addWeighted(src2, a, rol, 1 - a, 0, rol);
 }
 
+void XImagePro::Blend(double a) {
+	if (des.empty()) return;
+	if (src2.empty()) return;
+	if (src2.size() != des.size())
+		resize(src2, src2, des.size());
+	addWeighted(src2, a, des, 1 - a, 0, des);
+}
+
+
 XImagePro::XImagePro(){
 
 }

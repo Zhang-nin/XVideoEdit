@@ -15,7 +15,8 @@ enum XTaskType {
 	XTASK_PYUP,
 	XTASK_CLIP,
 	XTASK_GRAY,
-	XTASK_MASK
+	XTASK_MASK,
+	XTASK_BLEND
 };
 struct XTask
 {
