@@ -30,6 +30,8 @@ public:
 	//停止保存视频，写入视频帧索引
 	void StopSave();
 
+	void SetMark(cv::Mat mark) { mutex.lock(); this->mark = mark; mutex.unlock(); };
+
 	~XVideoThread();
 
 	//线程入口函数
@@ -46,6 +48,7 @@ protected:
 	QMutex mutex;
 	bool isWrite = false;
 	bool isPlay = false;
+	cv::Mat mark;
 	XVideoThread();
 };
 

@@ -83,8 +83,8 @@ void XVideoThread::run() {
 		//ÏÔÊ¾Í¼Ïñ1
 		if(!isWrite)
 			ViewImage1(mat1);
-
-		Mat des = XFilter::Get()->Filter(mat1, Mat());
+		Mat mat2 = mark;
+		Mat des = XFilter::Get()->Filter(mat1, mat2);
 		//ÏÔÊ¾Í¼Ïñ2
 		if (!isWrite)
 			ViewDes(des);

@@ -77,6 +77,14 @@ void XImagePro::Gray() {
 	cvtColor(des, des, COLOR_BGR2GRAY);
 }
 
+//ˮӡ
+void XImagePro::Mark(int x, int y, double a) {
+	if (des.empty()) return;
+	if (src2.empty()) return;
+	Mat rol = des(Rect(x, y, src2.cols, src2.rows));
+	addWeighted(src2, a, rol, 1 - a, 0, rol);
+}
+
 XImagePro::XImagePro(){
 
 }

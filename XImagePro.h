@@ -33,6 +33,10 @@ public:
 	void Clip(int x, int y, int w, int h);
 	//转为灰度图
 	void Gray();
+
+	//水印
+	void Mark(int x, int y, double a);
+
 	XImagePro();
 	~XImagePro();
 private:

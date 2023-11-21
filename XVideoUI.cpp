@@ -5,11 +5,15 @@
 #include<iostream>
 #include"XVideoThread.h"
 #include"XFilter.h"
+#include<opencv2/imgproc.hpp>
+#include<opencv2/highgui.hpp>
+#include<opencv2/imgcodecs.hpp>
 using namespace std;
 
 static bool pressSlider = false;
 static bool isExport = false;
 static bool isColor = true;
+static bool isMark = false;
 XVideoUI::XVideoUI(QWidget* parent)
 	: QWidget(parent)
 {
@@ -200,6 +204,16 @@ void XVideoUI::Set() {
 		break;
 	}
 
+	//水印
+	if (isMark) {
+		double x = ui.mx->value();
+		double y = ui.my->value();
+		double a = ui.ma->value();
+		XFilter::Get()->Add(XTask{ XTASK_MASK,
+			{x, y, a}
+			});
+	}
+
 }
 
 //导出视频
@@ -240,6 +254,20 @@ void XVideoUI::Pause() {
 	//ui.pauseButton->setGeometry(ui.playButton->geometry());
 	ui.pauseButton->hide();
 	XVideoThread::Get()->Pause();
+}
+
+//水印
+void XVideoUI::Mark() {
+	isMark = false;
+	QString name = QFileDialog::getOpenFileName(this, "select image:");
+	if (name.isEmpty()) {
+		return;
+	}
+	std::string file = name.toLocal8Bit().data();
+	cv::Mat mark = cv::imread(file);
+	if (mark.empty())return;
+	XVideoThread::Get()->SetMark(mark);
+	isMark = true;
 }
 
 void XVideoUI::ButSetEnable(bool flag) {

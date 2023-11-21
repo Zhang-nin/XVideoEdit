@@ -28,6 +28,8 @@ public slots:
     void Pause();
     //∆Ù”√∞¥≈•
     void ButSetEnable(bool flag=true);
+    //ÀÆ”°
+    void Mark();
 private:
     Ui::XVideoUIClass ui;
 };
