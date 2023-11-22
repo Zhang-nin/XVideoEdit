@@ -356,4 +356,19 @@ void XVideoUI::ButSetEnable(bool flag) {
 	ui.playButton->setEnabled(flag);
 	ui.exportButton->setEnabled(flag);
 	ui.setButton->setEnabled(flag);
+	ui.playSlider->setEnabled(flag);
+	ui.left->setEnabled(flag);
+	ui.right->setEnabled(flag);
+
+	//控制进度条
+	if (flag) {
+		int end = ui.right->value();
+		if (ui.left->value() > end) {
+			ui.playSlider->setValue(end);
+			ui.left->setValue(end);
+		}
+		if (ui.playSlider->value() > end) {
+			ui.playSlider->setValue(end);
+		}
+	}
 }
